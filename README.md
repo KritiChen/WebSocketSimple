@@ -266,6 +266,8 @@ socket.onclose = () => {
 ```
 
 # 三、后端设计时序图
+![Uploading image-20250406222320605.png…]()
+
 
 ![image-20250406222320605](D:\code\com\WebSocketSimple\WebSocket\imgs\image-20250406222320605.png)
 
