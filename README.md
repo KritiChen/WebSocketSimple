@@ -266,10 +266,9 @@ socket.onclose = () => {
 ```
 
 # 三、后端设计时序图
-![Uploading image-20250406222320605.png…]()
+![image-20250406222320605](https://github.com/user-attachments/assets/0093ba11-bdec-4283-8410-d9912549e166)
 
 
-![image-20250406222320605](D:\code\com\WebSocketSimple\WebSocket\imgs\image-20250406222320605.png)
 
 # 四、前端代码（AI生成，可以自己优化）
 
