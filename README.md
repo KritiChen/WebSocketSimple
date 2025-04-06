@@ -7,9 +7,9 @@
 
 **账号：张无忌 密码：654321**
 
-![image-20250406220404857](D:\code\com\WebSocketSimple\WebSocket\imgs\image-20250406220404857.png)
+![image-20250406220404857](https://github.com/user-attachments/assets/4dabf146-5fc1-4662-881b-7f4caa964aab)
+![image-20250406220517842](https://github.com/user-attachments/assets/33461b79-0721-4d06-8281-b4a61fa686dc)
 
-![image-20250406220517842](D:\code\com\WebSocketSimple\WebSocket\imgs\image-20250406220517842.png)
 
 # 一、用WebSocket协议实现聊天室的原因
 
