@@ -8,6 +8,31 @@
             --primary-color: #4CAF50;
             --error-color: #ff4444;
         }
+        /* 系统消息特殊样式 */
+        .system-user-list {
+            background: #f8f8f8;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 20px;
+            margin: 15px 10%;
+        }
+
+        .user-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .user-item {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .user-item::before {
+            content: "⚔️";
+            margin-right: 5px;
+        }
 
         body {
             margin: 0;
@@ -191,29 +216,58 @@
         };
     }
 
-    // 安全解析消息
+    // 增强版消息解析
     function safeParseMessage(data) {
         try {
-            const msg = JSON.parse(data);
-            if (!msg.hasOwnProperty('from') || !msg.hasOwnProperty('message')) {
-                throw new Error('消息格式无效');
-            }
-            return msg;
+            const rawMsg = JSON.parse(data);
+
+            // 适配图片中的非常规JSON格式
+            const isSystem = String(rawMsg.system).toLowerCase() === "true";
+            const messageContent = Array.isArray(rawMsg.message)
+                ? rawMsg.message
+                : [rawMsg.message];
+
+            return {
+                system: isSystem,
+                from: rawMsg.fromName || null,
+                message: messageContent
+            };
         } catch (e) {
             throw new Error('消息解析失败: ' + e.message);
         }
     }
 
-    // 消息渲染函数
-    function addSystemMessage(text) {
+    // 修改后的系统消息渲染
+    function addSystemMessage(content) {
         const container = document.getElementById('messageContainer');
         const div = document.createElement('div');
-        div.className = 'system-message';
-        div.textContent = text;
+
+        if (Array.isArray(content)) {
+            // 处理用户列表消息
+            div.className = 'system-user-list';
+            div.innerHTML = `
+                    <div class="system-header">🏮 当前在线豪杰</div>
+                    <div class="user-list">
+                        ${content.map(user => `
+                            <div class="user-item">${escapeHtml(user)}</div>
+                        `).join('')}
+                    </div>
+                `;
+        } else {
+            // 普通系统消息
+            div.className = 'system-message';
+            div.innerHTML = `
+                    <svg style="width:16px;height:16px;vertical-align:-2px" viewBox="0 0 24 24">
+                        <path fill="${escapeHtml(content).includes('进入') ? '#4CAF50' : '#ff4444'}"
+                              d="M11,9H13V7H11M12,20C8.13,20 5,16.87 5,13C5,11.07 5.78,9.32 7.05,8.05L8.46,9.46C7.61,10.31 7,11.5 7,13C7,15.76 9.24,18 12,18C14.76,18 17,15.76 17,13C17,11.5 16.39,10.31 15.54,9.46L16.95,8.05C18.22,9.32 19,11.07 19,13C19,16.87 15.87,20 12,20M11,15H13V11H11M12,4C14.12,4 16,5.88 16,8C16,10.12 14.12,12 12,12C9.88,12 8,10.12 8,8C8,5.88 9.88,4 12,4Z"/>
+                    </svg>
+                    ${escapeHtml(content)}
+                `;
+        }
+
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
     }
-
     function addReceivedMessage(msg) {
         const container = document.getElementById('messageContainer');
         const div = document.createElement('div');
